@@ -2,37 +2,33 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
-    public static int isPossible(String line) {
-        System.out.println(line);
-        int id = Integer.parseInt(line.substring(5, line.indexOf(':')));
+    public static int power(String line) {
         String withoutHeader = line.substring(line.indexOf(':') + 2);
         String[] games = withoutHeader.split("; ");
+        int redCount = 0;
+        int greenCount = 0;
+        int blueCount = 0;
         for (String game : games) {
             String[] cubes = game.split(", ");
             for (String cube : cubes) {
                 String[] cubeCount = cube.split(" ");
+                int cubeNum = Integer.parseInt(cubeCount[0]);
                 if (cubeCount[1].equals("red")) {
-                    if (Integer.parseInt(cubeCount[0]) > 12) {
-                        return 0;
-                    }
+                    redCount = Math.max(redCount, cubeNum);
                 } else if (cubeCount[1].equals("green")) {
-                    if (Integer.parseInt(cubeCount[0]) > 13) {
-                        return 0;
-                    }
+                    greenCount = Math.max(greenCount, cubeNum);
                 } else {
-                    if (Integer.parseInt(cubeCount[0]) > 14) {
-                        return 0;
-                    }
+                    blueCount = Math.max(blueCount, cubeNum);
                 }
             }
         }
-        return id;
+        return redCount * greenCount * blueCount;
     }
 
-    public static int sumIds(List<String> lines) {
+    public static int sumPowers(List<String> lines) {
         int rtn = 0;
         for (String line : lines) {
-            rtn += Solution.isPossible(line);
+            rtn += Solution.power(line);
         }
         return rtn;
     }
@@ -46,7 +42,7 @@ public class Solution {
             input.add(st);
         }
         FileWriter fw = new FileWriter("C:\\Users\\vince\\IdeaProjects\\AoC2023\\src\\output.txt");
-        fw.write(Solution.sumIds(input) + "\n");
+        fw.write(Solution.sumPowers(input) + "\n");
         fw.close();
     }
 }
